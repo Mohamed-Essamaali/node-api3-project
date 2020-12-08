@@ -1,9 +1,15 @@
 const express = require('express');
 
 const router = express.Router();
+const users = require('./userDb')
+const checkUserId = require('../custom_Middleware/usersMiddleware')
 
 router.post('/', (req, res) => {
   // do your magic!
+  users.insert(req.body)
+  .then(post=>{
+    res.status(201).json(post)
+  })
 });
 
 router.post('/:id/posts', (req, res) => {
@@ -12,10 +18,16 @@ router.post('/:id/posts', (req, res) => {
 
 router.get('/', (req, res) => {
   // do your magic!
+  users.get()
+  .then(posts=>{
+    res.status(201).json(posts)
+  })
+  .catch(err=>console.log(err))
 });
 
-router.get('/:id', (req, res) => {
+router.use('/:id', checkUserId,(req, res) => {
   // do your magic!
+  res.status(200).json(req.user)
 });
 
 router.get('/:id/posts', (req, res) => {
