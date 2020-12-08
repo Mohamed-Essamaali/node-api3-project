@@ -13,7 +13,7 @@ const checkUserId = (req,res,next)=>{
         })
         .catch(err=>{
             console.log(err)
-            res.status(500).json({message:'sometinh is wrong'})
+            res.status(500).json({message:'someting is wrong'})
         })
 
     }

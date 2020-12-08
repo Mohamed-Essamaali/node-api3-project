@@ -12,29 +12,29 @@ router.post('/', (req, res) => {
   })
 });
 
-router.post('/:id/posts', (req, res) => {
+router.post('/:id/posts', validateUserId(), (req, res) => {
   // do your magic!
 });
 
 router.get('/', (req, res) => {
   // do your magic!
   users.get()
-  .then(posts=>{
-    res.status(201).json(posts)
+  .then(users=>{
+    res.status(201).json(users)
   })
   .catch(err=>console.log(err))
 });
 
-router.use('/:id', checkUserId,(req, res) => {
+router.get('/:id', validateUserId(),(req, res) => {
   // do your magic!
   res.status(200).json(req.user)
 });
 
-router.get('/:id/posts', (req, res) => {
+router.get('/:id/posts', validateUserId(), (req, res) => {
   // do your magic!
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', validateUserId(), (req, res) => {
   // do your magic!
 });
 
@@ -44,8 +44,26 @@ router.put('/:id', (req, res) => {
 
 //custom middleware
 
-function validateUserId(req, res, next) {
-  // do your magic!
+function validateUserId(){
+
+  return (req, res, next) =>{
+    // do your magic!
+    console.log('params',req.params.id)
+    users.getById(req.params.id)
+        .then(user=>{
+            if(user){
+                req.user=user
+                next()
+            }else {
+              res.status(404).json({message: `User with id ${req.params.id} doesn't exist `})
+            }
+           
+        })
+        .catch(err=>{
+            console.log(err)
+            res.status(500).json({message:'someting is wrong'})
+         })
+   }
 }
 
 function validateUser(req, res, next) {
