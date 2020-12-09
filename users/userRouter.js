@@ -54,7 +54,12 @@ router.get('/:id/posts', validateUserId(), (req, res,next) => {
   let id = req.params.id
   users.getUserPosts(id)
   .then(posts=>{
-    res.status(200).json(posts)
+    if(posts.length){
+      res.status(200).json(posts)
+    } else {
+      res.status(404).json({message: `No Posts for user id ${id}`})
+    }
+    
 
   })
   .catch(err=>next(err))
@@ -109,9 +114,11 @@ function validateUserId(){
 
 function validateUser() {
   // do your magic!
-  return (req, res, next)=>{let newUser = req.body
+  return (req, res, next)=>{
+    
+    let newUser = req.body
   if(!newUser.name){
-    res.status(404).json({message: "You should include a name for the user"})
+   return res.status(400).json({message: "missing user data"})
   }
   next()
 }
@@ -122,7 +129,7 @@ function validatePost(){
     // do your magic!
     let newPost = req.body.text
     if(!newPost){
-      res.status(404).json({message:"You should include a text for the post"})
+     return res.status(400).json({message:"missing post data"})
     }
     next()
   }
