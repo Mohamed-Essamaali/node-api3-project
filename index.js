@@ -1,4 +1,5 @@
 // code away!
+require('dotenv').config()
 const express = require('express')
 
 const userRoute = require('./users/userRouter')
@@ -21,8 +22,8 @@ server.use((err,req,res,next)=>{
     next()
 })
 
-const port = 5000
+const port = process.env.PORT || 5000;
 
 server.listen(port,()=>{
-    console.log('   Server is listening on port 5000  '.grey)
+    console.log(`   Server is listening on port ${port}  `.grey)
 })
