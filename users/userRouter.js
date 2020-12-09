@@ -35,11 +35,11 @@ router.post('/:id/posts',validateUserId(), validatePost(), (req, res,next) => {
 
 router.get('/', (req, res,next) => {
   // do your magic!
-  const messageOfTheDay = process.env.MOTD || 'Hello World!'
+ 
   users.get()
   .then(users=>{
 
-    res.status(201).json(users, messageOfTheDay)
+    res.status(201).json(users)
 
   })
   .catch(err=>next(err))
